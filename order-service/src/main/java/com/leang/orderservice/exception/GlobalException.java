@@ -77,6 +77,10 @@ public class GlobalException {
     public ResponseEntity<ProblemDetail> badRequestException(BadRequestException e) {
         return problemDetailResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ProblemDetail> insufficientStockException(InsufficientStockException e) {
+        return problemDetailResponseEntity(e.getMessage(), HttpStatus.INSUFFICIENT_STORAGE);
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandler.class);
 

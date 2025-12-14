@@ -3,6 +3,8 @@ package com.leang.orderservice.service.impl;
 
 import com.leang.orderservice.client.InventoryServiceClient;
 import com.leang.orderservice.exception.NotFoundException;
+import com.leang.orderservice.kafka.StockUpdateProducer;
+import com.leang.orderservice.kafka.message.StockUpdateMessage;
 import com.leang.orderservice.model.dto.request.BatchProductRequest;
 import com.leang.orderservice.model.dto.request.OrderItemRequest;
 import com.leang.orderservice.model.dto.request.OrderRequest;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final InventoryServiceClient inventoryServiceClient;
+    private final StockUpdateProducer stockUpdateProducer;
 
 
     @Override
@@ -61,6 +64,10 @@ public class OrderServiceImpl implements OrderService {
         List<Long> productIds = orderRequest.getOrderItems().stream().map(OrderItemRequest::getProductId).distinct().toList();
         List<Product> products = Objects.requireNonNull(inventoryServiceClient.getAllProductsByIds(new BatchProductRequest(productIds)).getBody()).getPayload();
         Order save = orderRepository.save(orderRequest.toEntity(products));
+        List<StockUpdateMessage.StockUpdateItem> items = orderRequest.getOrderItems().stream()
+                .map(i -> new StockUpdateMessage.StockUpdateItem(i.getProductId(), i.getQty()))
+                .toList();
+        stockUpdateProducer.sendMessage("stock-update-topic",new StockUpdateMessage(items,"DECREASE"));
         return getOrderById(save.getId());
     }
 }

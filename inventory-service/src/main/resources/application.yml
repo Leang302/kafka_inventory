@@ -12,5 +12,17 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: inventory-service-group-v2
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        # Correct property name here
+        # Multiple type can be seperated by commas
+        spring.json.type.mapping: com.leang.orderservice.kafka.message.StockUpdateMessage:com.leang.inventoryservice.kafka.message.StockUpdateMessage
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
 server:
   port: 8081
