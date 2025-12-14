@@ -12,4 +12,8 @@ public interface OrderService {
     OrderResponse getOrderById(Long id);
     Order getOrderByIdInternal(Long id);
     OrderResponse createOrder(OrderRequest orderRequest);
+
+    OrderResponse updateOrderById(Long id, OrderRequest orderRequest);
+
+    void deleteOrderById(Long id);
 }

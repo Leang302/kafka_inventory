@@ -33,5 +33,16 @@ public class OrderController extends BaseController {
         return responseEntity("Order created successfully", HttpStatus.CREATED, orderService.createOrder(orderRequest));
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<ApiResponse<OrderResponse>> updateOrderById(@RequestBody OrderRequest orderRequest, @PathVariable Long id) {
+        return responseEntity("Order created successfully", orderService.updateOrderById(id,orderRequest));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<ApiResponse<OrderResponse>> deleteOrderById(@PathVariable Long id) {
+        orderService.deleteOrderById(id);
+        return responseEntity("Order deleted successfully");
+    }
+
 
 }

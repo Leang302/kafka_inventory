@@ -22,7 +22,7 @@ public class Order extends BaseEntityAudit {
     private Long id;
     private String customerName;
     private Boolean status;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<OrderItem> orderItems;
 
     public OrderResponse toResponse(List<Product> products) {
