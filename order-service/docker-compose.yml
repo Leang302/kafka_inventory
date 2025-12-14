@@ -1,0 +1,14 @@
+services:
+  order_db:
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: order
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    volumes:
+      - order_data:/var/lib/postgresql
+volumes:
+  order_data:

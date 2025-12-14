@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/inventory
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+server:
+  port: 8081
